@@ -165,7 +165,6 @@ const Group = () => {
       </ul>
 
 
-      {/* Create New Group Modal */}
       {isCreateModalOpen && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm w-full">
@@ -265,7 +264,6 @@ const Group = () => {
         </div>
       )}
 
-      {/* Edit Group Modal */}
       {isEditModalOpen && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-md p-6 w-1/3">
@@ -365,7 +363,6 @@ const Group = () => {
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm w-full">

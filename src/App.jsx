@@ -4,6 +4,7 @@ import Sidebar from "./components/Sidebar";
 import Users from "./components/Users";
 import Group from "./components/Group";
 import Login from "./components/Login";
+import ProtectedRoute from "./components/ProtectedRoute"; 
 
 const Layout = () => (
   <div className="flex">
@@ -17,15 +18,14 @@ const Layout = () => (
   </div>
 );
 
-const App = () => {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/app/*" element={<Layout />} /> 
-      </Routes>
-    </Router>
-  );
-};
+const App = () => (
+  <Router>
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/app/*" element={<ProtectedRoute><Layout /></ProtectedRoute>} />
+    </Routes>
+  </Router>
+);
 
 export default App;

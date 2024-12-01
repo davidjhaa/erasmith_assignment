@@ -17,20 +17,15 @@ const Login = () => {
         return toast.error("Please enter your credentials.");
       }
   
-      // API call to login
       const response = await axios.post(`${Backend_URL}/users/login`, { email, password });
   
       if (response.status === 200) {
-        // Extract role from the response
         const { role } = response.data;
   
-        // Store role in local storage
-        localStorage.setItem("userRole", role);
+        localStorage.setItem("role", role);
   
-        // Show success toast
         toast.success("Login successful!");
   
-        // Redirect user
         navigate("/app/users");
       } else {
         toast.error("Unexpected response. Please try again.");
@@ -38,7 +33,6 @@ const Login = () => {
     } catch (error) {
       console.error("Login error:", error);
   
-      // Handle specific error scenarios
       if (error.response && error.response.status === 401) {
         toast.error("Invalid credentials. Please try again.");
       } else {

@@ -6,12 +6,15 @@ import "react-toastify/dist/ReactToastify.css";
 const Backend_URL = import.meta.env.VITE_Backend_URL;
 
 const Users = () => {
+  const currentUserRole = localStorage.getItem("role");
+  const isDisabled = currentUserRole !== "Admin";
+
   const [users, setUsers] = useState([]);
   const [form, setForm] = useState({ username: "", email: "", role: "", groups: [] });
   const [editId, setEditId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const[activeid, setActiveid] = useState(null);
+  const [activeid, setActiveid] = useState(null);
 
   const fetchUsers = async () => {
     try {
@@ -63,24 +66,20 @@ const Users = () => {
     setIsDeleteModalOpen(false);
   };
 
-  const handleDelete = (id) => {
-    axios
-      .delete(`${Backend_URL}/users/${activeid}`)
-      .then(() => {
-        // Update state after successful deletion
-        setUsers((prevUsers) => prevUsers.filter((user) => user._id !== activeid));
-      })
-      .catch((error) => {
-        console.error("Error deleting user:", error);
-        alert("Failed to delete user. Please try again.");
-      });
-
-      toast.success("user Deleted Successfully")
-      setTimeout(()=>{
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${Backend_URL}/users/${activeid}`);
+      setUsers((prevUsers) => prevUsers.filter((user) => user._id !== activeid));
+      toast.success("User deleted successfully.");
+      setTimeout(() => {
         closeDeleteModal();
-      },2500)
+      }, 1000)
+    } catch (error) {
+      toast.error("Failed to delete user. Please try again.");
+    }
   };
-  
+
+
   const resetForm = () => {
     setForm({ username: "", email: "", role: "", groups: "" });
     setEditId(null);
@@ -93,7 +92,13 @@ const Users = () => {
         <h2 className="text-2xl font-bold mb-4 text-center px-4">Users</h2>
         <button
           className=" mr-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-          onClick={handleCreate}
+          onClick={() => {
+            if (currentUserRole === "Admin" || currentUserRole === "Manager") {
+              handleCreate();
+            } else {
+              toast.error("Not Authorized to create user. contact Admin");
+            }
+          }}
         >
           Create New User
         </button>
@@ -119,14 +124,23 @@ const Users = () => {
                 <td className="py-2 px-4">{user.groups.join(", ")}</td>
                 <td className="py-2 px-4">
                   <button
-                    className="bg-yellow-500 text-white px-2 py-1 rounded mr-2 hover:bg-yellow-600"
-                    onClick={() => handleEdit(user)}
+                    className={`px-2 py-1 rounded mr-2 ${isDisabled
+                      ? "bg-yellow-300 text-gray-400 cursor-not-allowed"
+                      : "bg-yellow-500 text-white hover:bg-yellow-600"
+                      }`}
+                    onClick={() => !isDisabled && handleEdit(user)}
+                    disabled={isDisabled}
                   >
                     Edit
                   </button>
                   <button
-                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                    onClick={() => openDeleteModal(user)}
+                    // className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                    className={`px-2 py-1 rounded ${isDisabled
+                      ? "bg-red-300 text-gray-400 cursor-not-allowed"
+                      : "bg-red-500 text-white hover:bg-red-600"
+                      }`}
+                    onClick={() => !isDisabled && openDeleteModal(user)}
+                    disabled={isDisabled}
                   >
                     Delete
                   </button>
@@ -150,7 +164,7 @@ const Users = () => {
           setForm={setForm}
           onSubmit={handleSubmit}
           onClose={resetForm}
-          editId = {editId}
+          editId={editId}
           isEditing={!!editId}
         />
       )}
@@ -181,7 +195,7 @@ const Users = () => {
       )}
       <ToastContainer
         position="top-center"
-        autoClose={4000}
+        autoClose={2000}
         hideProgressBar
         closeOnClick
       />

@@ -146,7 +146,7 @@ const EditUserModal = ({ form, editId, setForm, onSubmit, onClose, isEditing }) 
               value={form.role}
               onChange={(e) => setForm({ ...form, role: e.target.value })}
             >
-              {/* <option value="">Select a role</option> */}
+              <option value="">Select a role</option>
               {rolesOptions?.map((role, idx) => (
                 <option key={idx} value={role}>
                   {role}
