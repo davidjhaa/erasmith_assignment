@@ -3,7 +3,7 @@
 This project is a **User and Group Management System** built with a focus on **role-based access control (RBAC)**. It allows administrators, managers, and other users to interact with the application according to their assigned roles.  
 
 ## Live Demo  
-The application is deployed on **Vercel**. [Click here to access it](#) (Add your deployment link here).  
+The application is deployed on **Vercel**. [https://erasmithassignment.vercel.app/](#) .  
 
 ## Technology Stack  
 ### Frontend  
